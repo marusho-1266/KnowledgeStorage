@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: knowledge_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: knowledge_db
+      MYSQL_USER: knowledge_user
+      MYSQL_PASSWORD: knowledge_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+      --bind-address=0.0.0.0
+      --skip-name-resolve
+    restart: always
+
+volumes:
+  mysql_data: 

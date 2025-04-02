@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>ナレッジ一覧</h1>
+        <a href="{{ url_for('add_knowledge') }}" class="btn btn-primary mb-3">新規追加</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>タイトル</th>
+                        <th>カテゴリ</th>
+                        <th>作成日時</th>
+                        <th>更新日時</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in knowledge_entries %}
+                    <tr>
+                        <td>{{ entry.title }}</td>
+                        <td>{{ entry.category.name if entry.category else '未分類' }}</td>
+                        <td>{{ entry.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ entry.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_knowledge', id=entry.id) }}" class="btn btn-sm btn-primary">編集</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 
