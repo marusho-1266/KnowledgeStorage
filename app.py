@@ -21,6 +21,8 @@ class KnowledgeBase(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    department = db.Column(db.String(100), nullable=False)  # 部署
+    requester = db.Column(db.String(100), nullable=False)   # 問い合わせ者名
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -44,10 +46,12 @@ def add_knowledge():
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
+        department = request.form.get('department')
+        requester = request.form.get('requester')
         category_id = request.form.get('category_id')
 
-        if not title or not content:
-            flash('タイトルと内容は必須です。', 'error')
+        if not title or not content or not department or not requester:
+            flash('タイトル、内容、部署、問い合わせ者名は必須です。', 'error')
             return redirect(url_for('add_knowledge'))
 
         # カテゴリの存在確認
@@ -59,6 +63,8 @@ def add_knowledge():
         new_entry = KnowledgeBase(
             title=title,
             content=content,
+            department=department,
+            requester=requester,
             category_id=category_id
         )
 
@@ -82,10 +88,12 @@ def edit_knowledge(id):
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
+        department = request.form.get('department')
+        requester = request.form.get('requester')
         category_id = request.form.get('category_id')
 
-        if not title or not content:
-            flash('タイトルと内容は必須です。', 'error')
+        if not title or not content or not department or not requester:
+            flash('タイトル、内容、部署、問い合わせ者名は必須です。', 'error')
             return redirect(url_for('edit_knowledge', id=id))
 
         # カテゴリの存在確認
@@ -97,6 +105,8 @@ def edit_knowledge(id):
         try:
             entry.title = title
             entry.content = content
+            entry.department = department
+            entry.requester = requester
             entry.category_id = category_id
             db.session.commit()
             flash('ナレッジが正常に更新されました。', 'success')

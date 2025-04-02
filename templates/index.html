@@ -15,6 +15,8 @@
                 <thead>
                     <tr>
                         <th>タイトル</th>
+                        <th>部署</th>
+                        <th>問い合わせ者名</th>
                         <th>カテゴリ</th>
                         <th>作成日時</th>
                         <th>更新日時</th>
@@ -25,6 +27,8 @@
                     {% for entry in knowledge_entries %}
                     <tr>
                         <td>{{ entry.title }}</td>
+                        <td>{{ entry.department }}</td>
+                        <td>{{ entry.requester }}</td>
                         <td>{{ entry.category.name if entry.category else '未分類' }}</td>
                         <td>{{ entry.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                         <td>{{ entry.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
