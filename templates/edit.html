@@ -7,8 +7,11 @@
     </div>
 </div>
 
+<!-- 部署データをJavaScriptに渡す隠しフィールド -->
+<div id="departments-data" data-departments="{{ departments_by_area|tojson }}"></div>
+
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <form method="POST" class="mt-4">
             <div class="mb-3">
                 <label for="title" class="form-label">タイトル</label>
@@ -20,14 +23,27 @@
                 <input type="date" class="form-control" id="response_date" name="response_date" value="{{ response_date }}">
             </div>
             
-            <div class="mb-3">
-                <label for="area" class="form-label">エリア</label>
-                <input type="text" class="form-control" id="area" name="area" value="{{ entry.area }}">
-            </div>
-            
-            <div class="mb-3">
-                <label for="department" class="form-label">部署</label>
-                <input type="text" class="form-control" id="department" name="department" value="{{ entry.department }}" required>
+            <div class="mb-4">
+                <label class="form-label">エリアと部署</label>
+                
+                {% for area in areas %}
+                <div class="mb-3">
+                    <strong>{{ area }}：</strong>
+                    <div class="form-check-inline ms-2">
+                        {% for department in departments_by_area[area] %}
+                        <div class="form-check form-check-inline me-4">
+                            <input class="form-check-input" type="radio" name="area_department" 
+                                id="area_dept_{{ loop.index0 + (loop.index0 * 100) }}" 
+                                value="{{ area }}|{{ department }}"
+                                {% if entry.area == area and entry.department == department %}checked{% endif %} required>
+                            <label class="form-check-label" for="area_dept_{{ loop.index0 + (loop.index0 * 100) }}">
+                                {{ department }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
             
             <div class="mb-3">
@@ -63,7 +79,11 @@
             
             <div class="mb-3">
                 <label for="response_time" class="form-label">対応時間</label>
-                <input type="time" class="form-control" id="response_time" name="response_time" value="{{ response_time }}">
+                <select class="form-select" id="response_time" name="response_time" required>
+                    {% for time_option in time_options %}
+                    <option value="{{ time_option }}" {% if response_time == time_option %}selected{% endif %}>{{ time_option }}</option>
+                    {% endfor %}
+                </select>
             </div>
             
             <div class="mb-3">
@@ -78,4 +98,39 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // フォーム送信時の処理
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        const areaDepartmentValue = document.querySelector('input[name="area_department"]:checked')?.value;
+        
+        if (areaDepartmentValue) {
+            e.preventDefault();
+            
+            // エリアと部署を分割
+            const [area, department] = areaDepartmentValue.split('|');
+            
+            // 隠しフィールドを作成して追加
+            const areaInput = document.createElement('input');
+            areaInput.type = 'hidden';
+            areaInput.name = 'area';
+            areaInput.value = area;
+            form.appendChild(areaInput);
+            
+            const departmentInput = document.createElement('input');
+            departmentInput.type = 'hidden';
+            departmentInput.name = 'department';
+            departmentInput.value = department;
+            form.appendChild(departmentInput);
+            
+            // フォーム送信
+            form.submit();
+        }
+    });
+});
+</script>
 {% endblock %} 

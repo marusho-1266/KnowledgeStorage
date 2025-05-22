@@ -4,7 +4,7 @@ from datetime import datetime, date, time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://knowledge_user:knowledge_password@10.194.2.38:3307/knowledge_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://knowledge_user:knowledge_password@10.194.2.150:3307/knowledge_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -27,6 +27,37 @@ class KnowledgeBase(db.Model):
 
 # 問い合わせ区分の選択肢
 INQUIRY_TYPES = ['メール', '電話', 'その他']
+
+# エリアと部署の選択肢の定義
+AREAS = [
+    '高知本社', '営業本部', '本社企画', '東京支店', '四国中央', 
+    'その他', '配送拠点', '東日本', '九州', 'アクトヒューマンケア'
+]
+
+DEPARTMENTS_BY_AREA = {
+    '高知本社': ['経理', '営業事務', 'WEB', 'ｹｱｻﾌﾟﾗｲ', '営業支援', '仕入'],
+    '営業本部': ['営業', '営業企画'],
+    '本社企画': ['企画'],
+    '東京支店': ['営業'],
+    '四国中央': ['物流管理'],
+    'その他': ['東海営業', '岡山営業', '広島営業', '徳島営業', '福岡営業'],
+    '配送拠点': ['西日本', '福島倉庫', '横浜倉庫', '八尾', '福岡倉庫', '松山倉庫'],
+    '東日本': ['営業事務'],
+    '九州': ['WEB', 'FAX'],
+    'アクトヒューマンケア': ['愛媛', '福岡']
+}
+
+# 対応時間の選択肢（15分刻み）
+def generate_time_options():
+    options = []
+    for hour in range(25):  # 0時から24時まで
+        for minute in [0, 15, 30, 45]:
+            if hour == 24 and minute > 0:
+                continue  # 24時以降は24:00のみ
+            options.append(f"{hour:02d}:{minute:02d}")
+    return options
+
+TIME_OPTIONS = generate_time_options()
 
 def parse_date(date_str):
     """日付文字列をdate型に変換する"""
@@ -107,7 +138,9 @@ def add_knowledge():
 
     # GETリクエスト時のデフォルト値
     today = date.today().strftime('%Y-%m-%d')
-    return render_template('add.html', today=today, inquiry_types=INQUIRY_TYPES)
+    return render_template('add.html', today=today, inquiry_types=INQUIRY_TYPES, 
+                          areas=AREAS, departments_by_area=DEPARTMENTS_BY_AREA, 
+                          time_options=TIME_OPTIONS)
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_knowledge(id):
@@ -169,7 +202,9 @@ def edit_knowledge(id):
     return render_template('edit.html', entry=entry, 
                           response_date=response_date_str, 
                           response_time=response_time_str,
-                          inquiry_types=INQUIRY_TYPES)
+                          inquiry_types=INQUIRY_TYPES,
+                          areas=AREAS, departments_by_area=DEPARTMENTS_BY_AREA,
+                          time_options=TIME_OPTIONS)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True) 
