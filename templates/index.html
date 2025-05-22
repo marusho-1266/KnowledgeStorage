@@ -15,11 +15,13 @@
                 <thead>
                     <tr>
                         <th>タイトル</th>
+                        <th>対応日</th>
+                        <th>エリア</th>
                         <th>部署</th>
-                        <th>問合せ者名</th>
-                        <th>カテゴリ</th>
+                        <th>問い合わせ者名</th>
+                        <th>問い合わせ区分</th>
+                        <th>対応者</th>
                         <th>作成日時</th>
-                        <th>更新日時</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -27,11 +29,13 @@
                     {% for entry in knowledge_entries %}
                     <tr>
                         <td>{{ entry.title }}</td>
+                        <td>{{ entry.response_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ entry.area }}</td>
                         <td>{{ entry.department }}</td>
                         <td>{{ entry.requester }}</td>
-                        <td>{{ entry.category.name if entry.category else '未分類' }}</td>
+                        <td>{{ entry.inquiry_type }}</td>
+                        <td>{{ entry.respondent }}</td>
                         <td>{{ entry.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                        <td>{{ entry.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
                         <td>
                             <a href="{{ url_for('edit_knowledge', id=entry.id) }}" class="btn btn-sm btn-primary">編集</a>
                         </td>

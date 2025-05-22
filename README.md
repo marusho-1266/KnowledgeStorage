@@ -25,7 +25,7 @@ python -m venv venv
 venv\Scripts\activate
 
 # 必要なパッケージのインストール
-pip install -r requirements.txt
+pip install -r requirements.txt --no-dependencies
 ```
 
 3. Dockerコンテナの起動
@@ -61,17 +61,36 @@ python app.py
 
 1. knowledge_base
    - id: INT (PRIMARY KEY)
-   - title: VARCHAR(255)
-   - content: TEXT
-   - category_id: INT (FOREIGN KEY)
-   - created_at: TIMESTAMP
-   - updated_at: TIMESTAMP
+   - title: VARCHAR(255) - タイトル
+   - response_date: DATE - 対応日
+   - area: VARCHAR(100) - エリア
+   - department: VARCHAR(100) - 部署
+   - requester: VARCHAR(100) - 問い合わせ者名
+   - inquiry_type: VARCHAR(50) - 問い合わせ区分（メール/電話/その他）
+   - content: TEXT - 問い合わせ内容
+   - respondent: VARCHAR(100) - 対応者
+   - response_time: TIME - 対応時間
+   - response_content: TEXT - 回答内容
+   - created_at: TIMESTAMP - 作成日時
+   - updated_at: TIMESTAMP - 更新日時
 
-2. categories
-   - id: INT (PRIMARY KEY)
-   - name: VARCHAR(100)
-   - description: TEXT
-   - created_at: TIMESTAMP
+## 入力項目説明
+
+### 基本情報
+- **タイトル**: 問い合わせの概要を簡潔に記載
+- **対応日**: 問い合わせに対応した日（デフォルトは入力日）
+- **エリア**: 問い合わせ元の地域・エリア
+- **部署**: 問い合わせ元の部署名
+- **問い合わせ者名**: 問い合わせを行った人の氏名
+
+### 問い合わせ詳細
+- **問い合わせ区分**: 「メール」「電話」「その他」から選択
+- **内容**: 問い合わせの詳細内容
+
+### 対応詳細
+- **対応者**: 問い合わせに対応したスタッフ名
+- **対応時間**: 対応にかかった時間
+- **回答内容**: 問い合わせに対する回答内容
 
 ## 注意事項
 

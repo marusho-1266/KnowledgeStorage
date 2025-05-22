@@ -16,6 +16,16 @@
             </div>
             
             <div class="mb-3">
+                <label for="response_date" class="form-label">対応日</label>
+                <input type="date" class="form-control" id="response_date" name="response_date" value="{{ response_date }}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="area" class="form-label">エリア</label>
+                <input type="text" class="form-control" id="area" name="area" value="{{ entry.area }}">
+            </div>
+            
+            <div class="mb-3">
                 <label for="department" class="form-label">部署</label>
                 <input type="text" class="form-control" id="department" name="department" value="{{ entry.department }}" required>
             </div>
@@ -26,20 +36,39 @@
             </div>
             
             <div class="mb-3">
-                <label for="category_id" class="form-label">カテゴリ</label>
-                <select class="form-select" id="category_id" name="category_id" required>
-                    <option value="">カテゴリを選択してください</option>
-                    {% for category in categories %}
-                    <option value="{{ category.id }}" {% if category.id == entry.category_id %}selected{% endif %}>
-                        {{ category.name }}
-                    </option>
-                    {% endfor %}
-                </select>
+                <label class="form-label">問い合わせ区分</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="inquiry_type" id="inquiry_email" value="メール" {% if entry.inquiry_type == 'メール' %}checked{% endif %}>
+                    <label class="form-check-label" for="inquiry_email">メール</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="inquiry_type" id="inquiry_phone" value="電話" {% if entry.inquiry_type == '電話' %}checked{% endif %}>
+                    <label class="form-check-label" for="inquiry_phone">電話</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="inquiry_type" id="inquiry_other" value="その他" {% if entry.inquiry_type == 'その他' %}checked{% endif %}>
+                    <label class="form-check-label" for="inquiry_other">その他</label>
+                </div>
             </div>
             
             <div class="mb-3">
                 <label for="content" class="form-label">内容</label>
-                <textarea class="form-control" id="content" name="content" rows="10" required>{{ entry.content }}</textarea>
+                <textarea class="form-control" id="content" name="content" rows="5" required>{{ entry.content }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="respondent" class="form-label">対応者</label>
+                <input type="text" class="form-control" id="respondent" name="respondent" value="{{ entry.respondent }}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="response_time" class="form-label">対応時間</label>
+                <input type="time" class="form-control" id="response_time" name="response_time" value="{{ response_time }}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="response_content" class="form-label">回答内容</label>
+                <textarea class="form-control" id="response_content" name="response_content" rows="5">{{ entry.response_content }}</textarea>
             </div>
             
             <div class="mb-3">
