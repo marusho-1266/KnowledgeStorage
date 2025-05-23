@@ -30,13 +30,14 @@
                 <div class="mb-3">
                     <strong>{{ area }}：</strong>
                     <div class="form-check-inline ms-2">
+                        {% set outer_loop = loop %}
                         {% for department in departments_by_area[area] %}
                         <div class="form-check form-check-inline me-4">
                             <input class="form-check-input" type="radio" name="area_department" 
-                                id="area_dept_{{ loop.index0 + (loop.index0 * 100) }}" 
+                                id="area_dept_{{ outer_loop.index0 }}_{{ loop.index0 }}" 
                                 value="{{ area }}|{{ department }}"
                                 {% if entry.area == area and entry.department == department %}checked{% endif %} required>
-                            <label class="form-check-label" for="area_dept_{{ loop.index0 + (loop.index0 * 100) }}">
+                            <label class="form-check-label" for="area_dept_{{ outer_loop.index0 }}_{{ loop.index0 }}">
                                 {{ department }}
                             </label>
                         </div>

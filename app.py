@@ -4,7 +4,7 @@ from datetime import datetime, date, time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://knowledge_user:knowledge_password@10.194.2.150:3307/knowledge_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://knowledge_user:knowledge_password@10.194.2.38:3307/knowledge_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
